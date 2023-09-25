@@ -1,0 +1,15 @@
+<!-- TODO create page to return name, price and symbol of stock form lookup function -->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <div class="container" text-center>
+        <p>One share of {{ stock["name"] }} ({{ stock["symbol"] }}) costs {{ stock["price"] | usd }}</p>
+        <!-- <p>stock = {{ stock[symbol] }}</p> -->
+    </div>
+{% endblock %}
+
