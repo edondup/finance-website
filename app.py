@@ -29,7 +29,7 @@ if not os.environ.get("API_KEY"):
 
 @app.after_request
 def after_request(response):
-    """Ensure responses aren't cached"""
+    # Ensure responses aren't cached
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
@@ -39,24 +39,27 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    """Show portfolio of stocks"""
+    # Display a table with portfolio of stocks
 
     # Query transactions db and get the sum of users holdings
     holdings = db.execute("SELECT symbol, SUM(shares) AS shares FROM trades WHERE userid = ? GROUP BY symbol", session["user_id"])
 
-    # Loop through each stock symbol they own and get the stock name, price and total value
-    # from the lookup function
+    # Variable to track the combined value of all stocks
     total_stock_value = 0
+
+    # Loop through each owned stock lookup each symbol and get stock name, price and total value for each stock
     for holding in holdings:
         search = lookup(holding.get('symbol'))
         holding['name'] = search['name']
         holding['price'] = search['price']
         holding['total'] = holding['shares'] * holding['price']
+        
+        # Keep a running total value of all stocks combined
         total_stock_value = total_stock_value + holding['total']
 
+    # Check how much cash user has in their account
     balance = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
     cash = balance[0]["cash"]
-
 
     return render_template("index.html", holdings = holdings, cash = cash, total_stock_value = total_stock_value)
 
@@ -64,7 +67,7 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    """Buy shares of stock"""
+    # Buy shares of stock
     # if buy form was posted update db and redirect to index
     if request.method == "POST":
         symbol, shares  = request.form.get("symbol"), request.form.get("shares")
