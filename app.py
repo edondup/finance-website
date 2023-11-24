@@ -80,7 +80,6 @@ def buy():
                     stock = lookup(symbol.upper())
                     if stock:
                         price = (stock["price"])
-                        print("price", price)
                         cost = price * shares
 
                         balance = db.execute("SELECT cash FROM users WHERE id = ?", session["user_id"])
@@ -90,8 +89,7 @@ def buy():
                         # subtract the cost of the purchase from balance and create a buy entry into log db
 
                         new_balance = balance[0]["cash"] - cost
-                        print("cost", cost)
-                        print("new_balance", new_balance)
+                        
                         #check to make sure user has enough funds
                         if new_balance >= 0:
                             # Insert trade into trades database
@@ -119,7 +117,6 @@ def buy():
 def history():
     """Show history of transactions"""
     transactions = db.execute("SELECT symbol, type, shares, price, (shares * price) AS value, timestamp FROM trades WHERE userid = ?", session["user_id"])
-    print(transactions)
     return render_template("history.html", transactions = transactions)
 
 
@@ -214,8 +211,7 @@ def register():
             hash = generate_password_hash(password)
 
             user = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash)
-            print(user)
-            print(type(user))
+
             if user:
                 session["user_id"] = user
                 return redirect("/")
@@ -246,8 +242,7 @@ def sell():
                 shares = int(shares)
                 if shares > 0:
                     stock = db.execute("SELECT symbol, SUM(shares) AS shares, price FROM trades WHERE userid = ? AND symbol = ? ", session["user_id"], symbol)
-                    print(stock)
-                    print(type(stock))
+
                     if shares <= stock[0]["shares"]:
                         #store sell shares as a negative number note total will be negative on /history page because total = shares * price
                         shares = shares * -1
