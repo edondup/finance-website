@@ -2,7 +2,7 @@
 A website where users can create an account to manage a fictional portfolio of stocks of their choice. It can be a fun, risk-free way for users to practice and gain experience buying and selling assets that reflect real world prices.
 
 ## Overview
-EDs Finance is a Python web app using the Flask framework with Jinja on my page templates. I used a SQLite database to store as well as bootstrap to style my webpages and provide alerts. 
+EDs Finance is a Python web app which uses the Flask framework. It uses a SQLite database to store data and Bootstrap to style the pages and provide alerts. Jinja is included on the templates to generate the tables of data for the user.
 
 ### The Website
 If you haven't already logged in, you will be redirected to the login page where you can either login or signup. When users create an account, they are given $10,000 fake cash as a welcome bonus to purchase stocks. Lucky you! In order to research stock prices before trading, you may use the quote page to search stocks to get a price quote. Once you are ready to make a trade, you can use the buy page to purchase new stocks or the sell page to sell stocks you already own. The history page will give a record of all your transactions while the home gives a breakdown of your current holdings and cash.
